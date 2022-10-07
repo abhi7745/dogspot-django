@@ -1,0 +1,28 @@
+{% load static %}
+<aside id="sidebar-wrapper">
+    <div class="sidebar-brand">
+        <a href="#"> {% comment %} <img alt="Image" src="{% static 'dashboard/assets/img/logo.png' %}" class="header-logo" /> {% endcomment %}
+            <span class="logo-name">Admin</span>
+        </a>
+    </div>
+    <ul class="sidebar-menu">
+        <li class="menu-header">Main</li>
+
+        {% comment %} {% if request.resolver_match.url_name == 'admin.dashboard' %} active {% endif %} {% endcomment %}
+
+        <li class="dropdown active">
+            <a href="#" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
+        </li>
+
+
+
+       <li class="dropdown">
+            <a href="#" class="menu-toggle nav-link has-dropdown"><i
+                    data-feather="briefcase"></i><span>Widgets</span></a>
+            <ul class="dropdown-menu">
+                <li><a class="nav-link" href="#">Chart Widgets</a></li>
+                <li><a class="nav-link" href="#">Data Widgets</a></li>
+            </ul>
+        </li>
+    </ul>
+</aside>
