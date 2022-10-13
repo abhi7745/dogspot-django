@@ -3,17 +3,17 @@
 People can use this app to walk without fear from any place with photos and behavior of stray dogs.
 
 
-## 𝗔𝗽𝗽 𝗙𝗲𝗮𝘁𝘂𝗿𝗲𝘀
+## App Features
 ​- User Registration
 - Login
 
 
-## 𝗧𝗲𝗰𝗵𝗻𝗼𝗹𝗼𝗴𝗶𝗲𝘀 𝘂𝘀𝗲𝗱
+## Technologies Used
 
-### 𝙁𝙧𝙤𝙣𝙩-𝙀𝙣𝙙
+### Front-end
 - Html Template
 
-### 𝘽𝙖𝙘𝙠-𝙀𝙣𝙙
+### Back-end
 ​- Django
 
 
