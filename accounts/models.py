@@ -1,12 +1,11 @@
-# This Django app is build for automation using python, build by Abhijith KR 
-
+from email.policy import default
 from django.db import models
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
+# Extending custom User model fields
+class User(AbstractUser):
+    role=models.CharField(default='user', max_length=50, null=True, blank=True)
 
-class User_Account(models.Model):
-    user_id=models.OneToOneField(User,on_delete=models.CASCADE,primary_key=True)
-    email=models.CharField(max_length=255,null=True)

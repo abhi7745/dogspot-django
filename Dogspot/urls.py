@@ -22,10 +22,13 @@ from django.conf.urls.static import static # for 'media' folder setting purpose
 from accounts.views import index
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('django-admin/', admin.site.urls),
 
     # accounts app main urls
     # home url
     path('', index, name='index'),
     path('accounts/',include('accounts.urls')),
+    path('admin/',include('admin_panel.urls')),
+    path('user/',include('user.urls')),
+    
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT) # for 'media' folder setting purpose

@@ -1,13 +1,12 @@
 # This Django app is build for automation using python, build by Abhijith KR 
-
 from django.shortcuts import redirect, render
 
 # importing django login athentications
 from django.contrib.auth import authenticate, login, logout
 
-from accounts.models import User_Account
+from accounts.models import User
+from user.models import User_Account, Dog_Pics
 
-from django.contrib.auth.models import User
 
 import random # it is for otp generating purpose
 
@@ -80,37 +79,7 @@ def signup(request):
 
                 print('verify mail')
                 return redirect('verify_registration_mail')
-
-            # elif(len(pswd1)<6):
-            #     print('Password length too short.')
-            #     context={'static_mail':email,'error_msg':'Password length is too short. Require a minimum password length of 6–10 characters.'}
-            #     return render(request,'accounts/signup.html',context)
-
-            # elif(not pswd1==pswd2):
-            #     print('Password Missmatch')
-            #     context={'static_mail':email,'error_msg':"Those passwords didn't match. Try again."}
-            #     return render(request,'accounts/signup.html',context)
-
-            # elif User.objects.filter(username=email).exists():
-            #     print('User already exist View')
-            #     context={'static_mail':email,'error_msg':'Email already exist...'}
-            #     return render(request,'accounts/signup.html',context)
-
-            # else:
-            #     User_db=User.objects.create_user(
-            #             username=email,
-            #             password=pswd1,
-            #         )
-            #     # user_obj.set_password(password)
-
-            #     User_Account.objects.create(
-            #         user_id=User_db,
-            #         email=email,
-            #     )
-
-                # print('Sucessfully registered')
-                # return render(request,'accounts/login.html',{'success_msg': 'Successfully registered, Please login','static_mail':email})
-                    
+    
         return render(request,'accounts/signup.html')
 
 # signup - sub view
@@ -160,7 +129,12 @@ def registration_password_setter(request):
             print(confirm_psd)
 
 
-            if not psd == confirm_psd:
+            if(len(psd)<6):
+                print('Password length too short.')
+                context = {'msg':'Password must have at least 6 characters'}
+                return render(request,'accounts/registration_password_setter.html', context)
+
+            elif not psd == confirm_psd:
                 print('password not match')
                 context = {'msg':'Password does not match'}
                 return render(request,'accounts/registration_password_setter.html', context)
@@ -171,7 +145,7 @@ def registration_password_setter(request):
                 user_db.save()
 
                 User_Account.objects.create(
-                    user_id=user_db,
+                    user=user_db,
                     email=email,
                 )
                 # request.session['verification'] = False
