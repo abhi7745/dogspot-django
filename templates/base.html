@@ -24,6 +24,9 @@
     
     <!-- jquery-ui -->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+
+    <!-- leaflet css -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css" integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" />
     
 
 
@@ -67,11 +70,11 @@
                             <!-- <div class="dropdown-title">Hello {{ request.user }}</div> -->
                             
                         
-                            <div class="dropdown-divider"></div>
                             <a href="{% url 'logout' %}" class="dropdown-item has-icon text-danger"> <i
-                                    class="fas fa-sign-out-alt"></i>
+                                class="fas fa-sign-out-alt"></i>
                                 Logout
                             </a>
+                            <div class="dropdown-divider"></div>
                             <a href="#!" class="dropdown-item has-icon text-danger"> <i
                                     class="fas fa-minus-circle"></i>
                                 Close
@@ -117,6 +120,9 @@
     <!-- jquery-ui -->
     <!-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script> -->
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
+    <!-- leaflet javascript -->
+    <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js" integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg=" crossorigin=""></script>
 
     {% block scripts %}
     {% endblock %}

@@ -11,24 +11,36 @@
         {% comment %} {% if request.resolver_match.url_name == 'admin.dashboard' %} active {% endif %} {% endcomment %}
 
         <li class="dropdown active">
-            <a href="#" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
+            <a href="{% url 'user.dashboard' %}" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
         </li>
 
-        <li class="dropdown active">
-            <a href="#" class="nav-link"><i data-feather="map"></i><span>Map</span></a>
+        <li class="dropdown">
+            <a href="{% url 'user.map_view' %}" class="nav-link"><i data-feather="map"></i><span>Map</span></a>
         </li>
 
-        <li class="dropdown active">
+        <li class="dropdown">
+            <a href="#" class="menu-toggle nav-link has-dropdown">
+                <i data-feather="map-pin"></i><span>Add Dogspot</span></a>
+            <ul class="dropdown-menu">
+                <li><a class="nav-link" href="{% url 'user.static_dogspot_marker_map' %}">Add</a></li>
+                <li><a class="nav-link" href="#">View</a></li>
+            </ul>
+        </li>
+
+
+        <li class="dropdown">
             <a href="#" class="nav-link"><i data-feather="user"></i><span>Profile</span></a>
         </li>
 
-        <li class="dropdown active">
+        <li class="dropdown">
             <a href="#" class="nav-link"><i data-feather="settings"></i><span>Settings</span></a>
         </li>
 
 
 
-       <li class="dropdown">
+        
+
+        <li class="dropdown">
             <a href="#" class="menu-toggle nav-link has-dropdown"><i
                     data-feather="briefcase"></i><span>Widgets</span></a>
             <ul class="dropdown-menu">

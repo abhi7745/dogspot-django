@@ -4,7 +4,7 @@ People can use this app to walk without fear from any place with photos and beha
 
 
 ## App Features
-​- User Registration
+- User Registration
 - Login
 
 

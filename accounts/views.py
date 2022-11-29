@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
 
 from accounts.models import User
-from user.models import User_Account, Dog_Pics
+from user.models import Dog_Pics
 
 
 import random # it is for otp generating purpose
@@ -15,15 +15,23 @@ from django.template.loader import render_to_string # email html setup purpose
 from django.core.mail import EmailMessage # Email sending purpose
 from django.conf import settings 
 
+import geocoder
+
 # Create your views here.
 
 # index
 def index(request):
-    if request.user.is_authenticated: 
-        print(request.user,'User already logged in')
-        return render(request,'admin/dashboard.html')
-    else:
-        return render(request,'index.html')
+    latlng = geocoder.ip('me')
+    # if request.user.is_authenticated: 
+    #     print(request.user,'User already logged in')
+    #     return render(request,'admin/dashboard.html')
+    # else:
+    print(latlng)
+    print(latlng.ip)
+    print(latlng.lat)
+    print(latlng.lng)
+    return render(request,'index.html',{'lat':latlng.lat, 'lng':latlng.lng})
+
 # signup
 def signup(request):
 
@@ -144,10 +152,10 @@ def registration_password_setter(request):
                 user_db.set_password(psd)
                 user_db.save()
 
-                User_Account.objects.create(
-                    user=user_db,
-                    email=email,
-                )
+                # User_Account.objects.create(
+                #     user=user_db,
+                #     email=email,
+                # )
                 # request.session['verification'] = False
                 request.session.flush() # deleting all registration session from database
                 print('User verified and created')
