@@ -38,7 +38,16 @@ def signup(request):
     # user already logged in section (case 1)
     if request.user.is_authenticated: 
         print(request.user,'User already logged in')
-        return render(request,'admin/dashboard.html')
+
+        # admin or user - redirecting area
+        if request.user.role == 'admin':
+            return redirect('admin.dashboard')
+        elif request.user.role == 'user':
+            return redirect('user.dashboard')
+        else:
+            return redirect('/')
+
+        # return render(request,'admin/dashboard.html')
 
     else:
         # Registration section (case 2)
@@ -170,7 +179,13 @@ def login_page(request):
     if request.user.is_authenticated: 
         print(request.user,'User already logged in')
 
-        return render(request,'admin/dashboard.html')
+        # admin or user - redirecting area
+        if request.user.role == 'admin':
+            return redirect('admin.dashboard')
+        elif request.user.role == 'user':
+            return redirect('user.dashboard')
+        else:
+            return redirect('/')
     
     else:
         # Login section (case 2)
@@ -196,7 +211,13 @@ def login_page(request):
                     print(type(user),user)
                     print('User Login succesfull')
 
-                    return render(request,'admin/dashboard.html')   
+                    # admin or user - redirecting area
+                    if request.user.role == 'admin':
+                        return redirect('admin.dashboard')
+                    elif request.user.role == 'user':
+                        return redirect('user.dashboard')
+                    else:
+                        return redirect('/')
 
                 else:
                     print(user,'user')

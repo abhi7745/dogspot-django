@@ -65,7 +65,7 @@ margin-top: -50px;">
             lng = e.geocode.center.lng
             location_name = e.geocode.name
             var search_marker = L.marker([lat, lng], {draggable:true}).addTo(map);
-            search_marker.bindPopup(`${location_name} ${search_marker.getLatLng()}<br><a href="add-spot/${lat}/${lng}" target="_blank" style="display:flex;justify-content:center;font-weight:bold;">Add Dogspot </a>`).openPopup();
+            search_marker.bindPopup(`${location_name} ${search_marker.getLatLng()}<br><a href="/user/add-dogspot/${lat}/${lng}" target="_blank" style="display:flex;justify-content:center;font-weight:bold;">Add Dogspot </a>`).openPopup();
 
             // ondrag marker pointer updater
             search_marker.on('drag', function(e) {
@@ -75,7 +75,7 @@ margin-top: -50px;">
                 // console.log(e.target._popup._content)
                 console.log(search_marker)
                 // search_marker.bindPopup(`<a href="add-spot/${lat}/${lng}" target="_blank">Add Dogspot </a>` + search_marker.getLatLng()).openPopup();
-                search_marker.bindPopup(`${location_name} ${search_marker.getLatLng()}<br><a href="add-spot/${lat}/${lng}" target="_blank" style="display:flex;justify-content:center;font-weight:bold;">Add Dogspot </a>`).openPopup();
+                search_marker.bindPopup(`${location_name} ${search_marker.getLatLng()}<br><a href="/user/add-dogspot/${lat}/${lng}" target="_blank" style="display:flex;justify-content:center;font-weight:bold;">Add Dogspot </a>`).openPopup();
             });
 
 
@@ -95,7 +95,7 @@ margin-top: -50px;">
         lng = e.latlng.lng
         console.log(marker.getLatLng().lat, 'aaaaaaaaaaaaa')
         // marker.bindPopup(`<a href="add/${lat}/${lng}">Add Dogspot</a> ` + marker.getLatLng())
-        marker.bindPopup(`${marker.getLatLng()} <a href="add-spot/${lat}/${lng}" target="_blank" style="display:flex;justify-content:center;font-weight:bold;">Add Dogspot </a>`).openPopup();
+        marker.bindPopup(`${marker.getLatLng()} <a href="/user/add-dogspot/${lat}/${lng}" target="_blank" style="display:flex;justify-content:center;font-weight:bold;">Add Dogspot </a>`).openPopup();
         // alert(e.latlng)
         // console.log(e.latlng)
 
@@ -103,7 +103,7 @@ margin-top: -50px;">
             // console.log('marker drag event : ', marker.getLatLng());
             lat = marker.getLatLng().lat
             lng = marker.getLatLng().lng
-            marker.bindPopup(`${marker.getLatLng()} <a href="add-spot/${lat}/${lng}" target="_blank" style="display:flex;justify-content:center;font-weight:bold;">Add Dogspot </a>`).openPopup()
+            marker.bindPopup(`${marker.getLatLng()} <a href="/user/add-dogspot/${lat}/${lng}" target="_blank" style="display:flex;justify-content:center;font-weight:bold;">Add Dogspot </a>`).openPopup()
         });
     });
 
