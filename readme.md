@@ -17,6 +17,9 @@ People can use this app to walk without fear from any place with photos and beha
 ​- Django
 
 
+### Database
+- Mysql
+
 ## Database Stucture
 
 ![Database Structure](static/db_structure/db_structure.png)
