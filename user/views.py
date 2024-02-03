@@ -6,12 +6,22 @@ from django.contrib import messages
 from django.http import JsonResponse
 
 
-import geocoder
+import geocoder # for getting map location(latitude, longitude)
+
+from accounts.models import User
+
+
 # Create your views here.
 
+
 # dashboard
+
 def dashboard(request):
-    return render(request, 'user/dashboard.html')
+    user_count = User.objects.exclude(role = 'admin').count()
+
+    print(user_count, 'testing')
+    context = {'user_count': user_count}
+    return render(request, 'user/dashboard.html', context)
 
 # show all dogspot marker in map
 def map_view(request):
