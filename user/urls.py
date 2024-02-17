@@ -7,4 +7,5 @@ urlpatterns = [
     path('map-view/', map_view, name='user.map_view'),
     path('map-maker/', static_dogspot_marker_map, name='user.static_dogspot_marker_map'),
     path('add-dogspot/<str:lat>/<str:lng>/', add_dogspot, name='user.add_dogspot'),
+    path('dogspot_list/', dogspot_list, name='user.dogspot_list'),
 ]

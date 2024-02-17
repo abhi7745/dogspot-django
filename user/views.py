@@ -96,8 +96,11 @@ def add_dogspot(request, lat, lng):
 
     return render(request, 'user/add_dogspot.html', {'lat':lat, 'lng':lng})
 
-def dogspot_details(request):
-    return render(request, 'user/dogspot_details.html')
+def dogspot_list(request):
+    map_data = Map_Details.objects.filter(user=request.user.id)
+    # print(map_data, request.user.role)
+    context = {'map_data' : map_data }
+    return render(request, 'user/dogspot_list.html', context)
 
 # update
 # delete

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}
+User Dashboard
+{% endblock %}
+
+{% block sidebar %}
+{% include 'user/sidebar.html' %}
+{% endblock %}
+
+
+{% block content %}
+
+<section class="section">
+    
+    <div class="col-12">
+        <div class="card">
+        <div class="card-header">
+            <h4>Dogspot list</h4>
+            <div class="card-header-form">
+            <form>
+                <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search">
+                <div class="input-group-btn">
+                    <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                </div>
+                </div>
+            </form>
+            </div>
+        </div>
+        <div class="card-body p-4">
+            <div class="table-responsive">
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                    {% comment %} <th class="text-center">
+                        <div class="custom-checkbox custom-checkbox-table custom-control">
+                        <input type="checkbox" data-checkboxes="mygroup" data-checkbox-role="dad" class="custom-control-input" id="checkbox-all">
+                        <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
+                        </div>
+                    </th> {% endcomment %}
+                    <th>Title</th>
+                    <th>No of dogs</th>
+                    <th>Dog behaviour</th>
+                    <th>Image</th>
+                    <th>Action</th>
+                </tr>
+                {% for data in map_data %}
+
+                    <tr>
+                    {% comment %} <td class="p-0 text-center">
+                        <div class="custom-checkbox custom-control">
+                        <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-1">
+                        <label for="checkbox-1" class="custom-control-label">&nbsp;</label>
+                        </div>
+                    </td> {% endcomment %}
+
+                    <td>{{data.title}}</td>
+                    <td>{{data.no_of_dogs}}</td>
+                    <td>{{data.behaviour}}</td>
+                    
+                    {% comment %} <td>{{data.dog_pics_set.all.0.image.url}}</td> {% endcomment %}
+                    
+                    
+                    <td>
+                        {% comment %} <img alt="image" src="{{data.dog_pics_set.all.0.image.url}}" class="rounded-circle" width="35" data-toggle="tooltip" title="" data-original-title="Wildan Ahdian"> {% endcomment %}
+                        
+                        {% for pic in data.dog_pics_set.all %}
+                            {% comment %} <img alt="image" src="{{pic.image.url}}" class="rounded-circle" style="border-radius: 50%;" width="50" data-toggle="tooltip" title="" data-original-title="Wildan Ahdian"> {% endcomment %}
+                            <img alt="image" src="{{pic.image.url}}" class="" style="width: 50px; height: 50px; border-radius: 50%;" data-toggle="tooltip" title="" data-original-title="Wildan Ahdian">
+                        {% endfor %}
+
+                    </td>
+                    <td><a href="#" class="btn btn-primary">Detail</a></td>
+                    </tr>
+
+                {% endfor %}
+
+                
+                
+            </tbody></table>
+            </div>
+        </div>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}
