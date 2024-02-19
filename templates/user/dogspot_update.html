@@ -1,0 +1,335 @@
+{% extends 'base.html' %}
+
+{% block title %}
+User Dashboard
+{% endblock %}
+
+{% block sidebar %}
+{% include 'user/sidebar.html' %}
+{% endblock %}
+
+{% block styles %}
+<!-- Filepond stylesheet -->
+<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+
+<link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet"/>
+
+<style>
+    .filepond--credits{
+        display:none;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6 col-lg-6">
+            <div class="card">
+
+                <!-- <form id="form" method="POST" action="" enctype="multipart/form-data"> -->
+                <form id="form">
+                    {% csrf_token %}
+                    <div class="card-header">
+                        <h4>Update Dogspot</h4>
+                    </div>
+                    <div class="card-body">
+
+
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" id="title" name="title" value="{{ single_map_object.title }}" class="form-control" id="" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="description" name="description" value="{{ single_map_object.description }}" class="form-control {% if unicorn.errors.description %} is-invalid {% endif %}" required=""></textarea>
+                            
+                            <div class="invalid-feedback">
+                                {{ unicorn.errors.description.0.message }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Numbers Of Dogs</label>
+                            <input type="number" id="no_of_dogs" name="no_of_dogs" value="{{ single_map_object.no_of_dogs }}" class="form-control" min="1" id="" required>
+                        </div>
+
+                        {% comment %} <div class="form-group">
+                            <label>Select Dog Behaviour</label>
+                            <select name="tech_category_id" id="tech_category_id" class="form-control" required>
+                                <option value="" selected disabled>Select</option>
+                                <option value="aggressive">Aggressive</option>
+                                <option value="biting">Biting</option>
+                                <option value="Social">Social</option>
+                                <option value="friendly">Friendly</option>
+                                <option value="Barking">Barking</option>
+                                <option value="Chasing">Chasing</option>
+                                <option value="Territorial">Territorial</option>
+                                <option value="Illness">Illness</option>
+                            </select>
+                        </div> {% endcomment %}
+
+
+                        <div class="form-group">
+                            <label class="form-label">Select Dog Behaviour</label>
+
+                            <!-- multiple checkbox Behaviour value hold in input box -->
+                            <input type="text" id="behaviour_data_text_box" value="{{ single_map_object.behaviour }}"  name='behaviour' class="form-control">
+
+                            <div class="selectgroup selectgroup-pills">
+                              <label class="selectgroup-item">
+                                <input type="checkbox" name="value" value="Aggressive" class="selectgroup-input behaviour_checkbox" >
+                                <span class="selectgroup-button">Aggressive</span>
+                              </label>
+                              <label class="selectgroup-item">
+                                <input type="checkbox" name="value" value="Biting" class="selectgroup-input behaviour_checkbox">
+                                <span class="selectgroup-button">Biting</span>
+                              </label>
+                              <label class="selectgroup-item">
+                                <input type="checkbox" name="value" value="Social" class="selectgroup-input behaviour_checkbox">
+                                <span class="selectgroup-button">Social</span>
+                              </label>
+                              <label class="selectgroup-item">
+                                <input type="checkbox" name="value" value="Friendly" class="selectgroup-input behaviour_checkbox">
+                                <span class="selectgroup-button">Friendly</span>
+                              </label>
+                              <label class="selectgroup-item">
+                                <input type="checkbox" name="value" value="Barking" class="selectgroup-input behaviour_checkbox">
+                                <span class="selectgroup-button">Barking</span>
+                              </label>
+                              <label class="selectgroup-item">
+                                <input type="checkbox" name="value" value="Chasing" class="selectgroup-input behaviour_checkbox">
+                                <span class="selectgroup-button">Chasing</span>
+                              </label>
+                              <label class="selectgroup-item">
+                                <input type="checkbox" name="value" value="Territorial" class="selectgroup-input behaviour_checkbox">
+                                <span class="selectgroup-button">Territorial</span>
+                              </label>
+                              <label class="selectgroup-item">
+                                <input type="checkbox" name="value" value="Illness" class="selectgroup-input behaviour_checkbox">
+                                <span class="selectgroup-button">Illness</span>
+                              </label>
+                            </div>
+                          </div>
+                        
+                        
+
+                        <!-- We'll transform this input into a pond -->
+                        <div class="form-group">
+                            {% comment %} <label>Option 1</label> {% endcomment %}
+                            <input name="images" id="images" type="file" class="filepond" accept="image/*" multiple 
+                            data-max-file-size="1MB" data-max-files="4" required="">
+                           
+                            <div class="invalid-feedback">
+                                {{ unicorn.errors.company_name.0.message }}
+                            </div>
+                        </div>
+
+                        
+                        
+                    </div>
+                    <div class="card-footer text-right">
+                        <button class="btn btn-primary" id="add_Btn">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Filepond resize image style -->
+<style>
+    .filepond--root {
+        max-width:30em;
+    }
+    .filepond--item {
+        width: calc(25% - 0.5em);
+    }
+    body {
+        padding: 2em;
+    }
+    
+    img {
+        margin: 1em 2em 0 0;
+        border-radius: .25em;
+        box-shadow: 0 .125em .5em rgba(0,0,0,0.25);
+    }
+</style>
+
+{% endblock %}
+
+{% block scripts %}
+
+
+{% comment %} sweet alert2 cdn {% endcomment %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.14/dist/sweetalert2.all.min.js"></script>
+
+<!-- FilePond image preview library -->
+<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+<!-- FilePond validation library -->
+<script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+<!-- FilePond image-resize library -->
+{% comment %} <script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script> {% endcomment %}
+
+<!-- Load FilePond library -->
+<script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+
+<!-- Turn specific file input elements into ponds -->
+<script>
+
+    // Select Dog Behaviour input box value setter logic, eg: [Aggressive,Biting,Social,Friendly,Barking,Chasing,Territorial,Illness]
+    $('.behaviour_checkbox').click(function(){
+        var behaviour_data = "";
+
+        $('.behaviour_checkbox:checked').each(function(){
+            behaviour_data += $(this).val()+", "
+        })
+
+        behaviour_data=behaviour_data.substring(0, behaviour_data.length-2) //removing last comma
+
+        $('#behaviour_data_text_box').val(behaviour_data); // setting input value
+
+    });
+
+    // Register the plugin area
+
+    FilePond.registerPlugin(
+
+        // 1. image preview library registering
+        FilePondPluginImagePreview,
+        
+        // 2. input file validator library registering - (the default script will only accept image files)
+        FilePondPluginFileValidateType,
+        
+        // 3. image-resize library
+        //FilePondPluginImageResize,
+    );
+
+    var  files = [];
+    const inputElement = document.querySelector('input[type="file"]');
+    
+    // filepond object creating inside a function and calling them
+    function filepondcreator(){
+        
+        // initialization of filepond to dom element - add input-file element to filepond scripts
+        const pond = FilePond.create(inputElement, {
+            labelIdle: `Drag &amp; Drop your images or <span class="filepond--label-action" tabindex="0">Browse</span><br>`,
+            // imageCropAspectRatio: 1,
+            // imageResizeTargetWidth: 256,
+            // imageResizeMode: 'contain'
+            onaddfile: (err, fileItem) =>{
+                files.push(fileItem.file);
+                console.log(files);
+            },
+
+            onremovefile: (err, fileItem) =>{
+                const index = files.indexOf(fileItem.file);
+                if (index > -1){
+                    files.splice(index, 1);
+                }
+                console.log(files);
+            }
+            
+        }); 
+
+        // adding restyle filepond input box style 
+        $(".filepond--drop-label").addClass("form-control");
+    }
+    filepondcreator(); // filepond object creation function call
+
+    // initialization of filepond to dom element - add input-file element to filepond scripts
+    // FilePond.parse(document.body);
+
+
+    // ajax form submission area
+    var formData = new FormData();
+    $('#form').submit(function(e){
+        e.preventDefault();
+
+        // normal input elements data 
+        formData.append('title', $('#title').val());
+        formData.append('description', $('#description').val());
+        formData.append('no_of_dogs', $('#no_of_dogs').val());
+        formData.append('behaviour', $('#behaviour_data_text_box').val());
+        
+        // file input element data
+        formData.append('length', files.length); // passing image length using filepond method "onaddfile" and "onremovefile"
+        for (var i = 0; i < files.length; i++){
+            formData.append('images' + i, files[i]); // adding all 'n' images into formData, Eg: images1 = picture_name.jpg, image2, image3, etc....
+        }
+
+        // for django csrf_token setup
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+        // console.log(formData);
+
+        $.ajax({
+            type:'POST',
+            url: '',
+            data:formData,
+            cache:false,
+            processData:false,
+            contentType:false,
+            enctype: 'multipart/form-data',
+
+            beforeSend: function(){
+              $("#add_Btn").addClass("btn-progress disabled"); // adding button progress and disabled
+            },
+
+            success: function(data) {
+
+
+            if (data.point_exist){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: ' Map Location already added by other user ',
+                    footer: '<a href="{% url 'user.static_dogspot_marker_map' %}">Add New Point</a>'
+                })
+               
+                $("#add_Btn").removeClass("btn-progress disabled"); // removing button progress and disabled
+
+            }
+            else{
+
+                // alert('the form send successfully');
+                // console.log(formData);
+
+                $('#form')[0].reset(); // resetting all form elements, but filepond object will not affect form reset method
+
+                files=[]; // set to empty for form submission - because files adding methos start form scratch ("onaddfile" and "onremovefile")
+                FilePond.destroy(inputElement); // it will remove the entire filepond object from Dom element
+                filepondcreator(); // filepond object creation function re-call - it will create new filepond object after form submission
+                
+                $("#add_Btn").removeClass("btn-progress disabled"); // removing button progress and disabled
+
+                // sweet alert2 
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thank you for your contribution',
+                    text: ' Dogspot Successfully Added ',
+                    footer: '<a href="{% url 'user.static_dogspot_marker_map' %}">Add New Point</a>'
+                })
+                
+                // when form is success then redirect to map-marker view in after 5-seconds
+                setTimeout(
+                    function(){
+                        window.location.href = '{% url 'user.static_dogspot_marker_map' %}' // redirecting to map-marker view
+                        //alert('hai');
+                }, 5000);
+
+            }
+                
+            },
+            error: function() {
+                console.log(xhr.status + ':' + xhr.responseText );
+            }
+        })
+        
+    })
+
+</script>
+
+{% endblock %}

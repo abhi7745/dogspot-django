@@ -103,6 +103,21 @@ def dogspot_list(request):
     return render(request, 'user/dogspot_list.html', context)
 
 # update
+def dogspot_update(request):
+    if request.method == 'POST':
+        object_id = request.POST.get('id')
+        print(object_id)
+
+        if Map_Details.objects.filter(user=request.user.id, id=object_id).exists():
+            single_map_object = Map_Details.objects.filter(user=request.user.id, id=object_id).first()
+            print(single_map_object.id, single_map_object.title)
+
+            context = {'single_map_object' : single_map_object}
+            return render(request, 'user/dogspot_update.html', context)
+
+    else:
+        return redirect(dogspot_list)
+
 # delete
 
 def all_dogspot_list(request):
