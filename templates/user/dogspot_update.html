@@ -44,7 +44,7 @@ User Dashboard
 
                         <div class="form-group">
                             <label>Description</label>
-                            <textarea id="description" name="description" value="{{ single_map_object.description }}" class="form-control {% if unicorn.errors.description %} is-invalid {% endif %}" required=""></textarea>
+                            <textarea id="description" name="description"  class="form-control" required="">{{ single_map_object.description }}</textarea>
                             
                             <div class="invalid-feedback">
                                 {{ unicorn.errors.description.0.message }}
@@ -78,42 +78,52 @@ User Dashboard
                             <!-- multiple checkbox Behaviour value hold in input box -->
                             <input type="text" id="behaviour_data_text_box" value="{{ single_map_object.behaviour }}"  name='behaviour' class="form-control">
 
-                            <div class="selectgroup selectgroup-pills">
-                              <label class="selectgroup-item">
-                                <input type="checkbox" name="value" value="Aggressive" class="selectgroup-input behaviour_checkbox" >
-                                <span class="selectgroup-button">Aggressive</span>
-                              </label>
-                              <label class="selectgroup-item">
-                                <input type="checkbox" name="value" value="Biting" class="selectgroup-input behaviour_checkbox">
-                                <span class="selectgroup-button">Biting</span>
-                              </label>
-                              <label class="selectgroup-item">
-                                <input type="checkbox" name="value" value="Social" class="selectgroup-input behaviour_checkbox">
-                                <span class="selectgroup-button">Social</span>
-                              </label>
-                              <label class="selectgroup-item">
-                                <input type="checkbox" name="value" value="Friendly" class="selectgroup-input behaviour_checkbox">
-                                <span class="selectgroup-button">Friendly</span>
-                              </label>
-                              <label class="selectgroup-item">
-                                <input type="checkbox" name="value" value="Barking" class="selectgroup-input behaviour_checkbox">
-                                <span class="selectgroup-button">Barking</span>
-                              </label>
-                              <label class="selectgroup-item">
-                                <input type="checkbox" name="value" value="Chasing" class="selectgroup-input behaviour_checkbox">
-                                <span class="selectgroup-button">Chasing</span>
-                              </label>
-                              <label class="selectgroup-item">
-                                <input type="checkbox" name="value" value="Territorial" class="selectgroup-input behaviour_checkbox">
-                                <span class="selectgroup-button">Territorial</span>
-                              </label>
-                              <label class="selectgroup-item">
-                                <input type="checkbox" name="value" value="Illness" class="selectgroup-input behaviour_checkbox">
-                                <span class="selectgroup-button">Illness</span>
-                              </label>
+
+                            {% comment %} // this is an updation page - so, this script is dynamically create using javasript, the js logic is in the last area of this page {% endcomment %}
+                            {% comment %} <div class="selectgroup selectgroup-pills">
+                                <label class="selectgroup-item">
+                                    <input type="checkbox" name="value" value="Aggressive" class="selectgroup-input behaviour_checkbox" >
+                                    <span class="selectgroup-button">Aggressive</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input type="checkbox" name="value" value="Biting" class="selectgroup-input behaviour_checkbox">
+                                    <span class="selectgroup-button">Biting</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input type="checkbox" name="value" value="Social" class="selectgroup-input behaviour_checkbox">
+                                    <span class="selectgroup-button">Social</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input type="checkbox" name="value" value="Friendly" class="selectgroup-input behaviour_checkbox">
+                                    <span class="selectgroup-button">Friendly</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input type="checkbox" name="value" value="Barking" class="selectgroup-input behaviour_checkbox">
+                                    <span class="selectgroup-button">Barking</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input type="checkbox" name="value" value="Chasing" class="selectgroup-input behaviour_checkbox">
+                                    <span class="selectgroup-button">Chasing</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input type="checkbox" name="value" value="Territorial" class="selectgroup-input behaviour_checkbox">
+                                    <span class="selectgroup-button">Territorial</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input type="checkbox" name="value" value="Illness" class="selectgroup-input behaviour_checkbox">
+                                    <span class="selectgroup-button">Illness</span>
+                                </label>
+                            </div> {% endcomment %}
+
+                            {% comment %} this is for dynamic checkbox creation for dog behaviour [Aggressive,Biting,Social,Friendly,Barking,Chasing,Territorial,Illness] {% endcomment %}
+                            <div id="checkbox-container" class="selectgroup selectgroup-pills">
                             </div>
-                          </div>
+
+
+                        </div>
                         
+
+                            
                         
 
                         <!-- We'll transform this input into a pond -->
@@ -131,7 +141,8 @@ User Dashboard
                         
                     </div>
                     <div class="card-footer text-right">
-                        <button class="btn btn-primary" id="add_Btn">Add</button>
+                        <button class="btn btn-danger" id="delete_Btn">Delete</button>
+                        <button class="btn btn-primary" id="add_Btn">Update</button>
                     </div>
                 </form>
             </div>
@@ -179,8 +190,9 @@ User Dashboard
 <!-- Turn specific file input elements into ponds -->
 <script>
 
+    // this is an updation page - so, this script is rewrited to the last area of this page
     // Select Dog Behaviour input box value setter logic, eg: [Aggressive,Biting,Social,Friendly,Barking,Chasing,Territorial,Illness]
-    $('.behaviour_checkbox').click(function(){
+    {% comment %} $('.behaviour_checkbox').click(function(){
         var behaviour_data = "";
 
         $('.behaviour_checkbox:checked').each(function(){
@@ -191,7 +203,7 @@ User Dashboard
 
         $('#behaviour_data_text_box').val(behaviour_data); // setting input value
 
-    });
+    }); {% endcomment %}
 
     // Register the plugin area
 
@@ -329,6 +341,114 @@ User Dashboard
         })
         
     })
+
+</script>
+
+
+
+
+<!-- // Script to Create Behavior Checkboxes -->
+<script>
+    // Define the string containing the words
+    const DB_behaviours = "{{ single_map_object.behaviour }}".split(", ");  // Split the string into an array of words
+    
+    // Get the container element
+    const container = document.getElementById("checkbox-container");
+    
+    // Define the behavior checkboxes :- to Iterate print all individual behavior in to the div "checkbox-container" 
+    const behaviors = ["Aggressive", "Biting", "Social", "Friendly", "Barking", "Chasing", "Territorial", "Illness"];
+    // example like 
+    {% comment %}     
+    <label class="selectgroup-item">
+        <input type="checkbox" name="value" value="Aggressive" class="selectgroup-input behaviour_checkbox" >
+        <span class="selectgroup-button">Aggressive</span>
+    </label> 
+    {% endcomment %}
+
+    // Iterate through the behaviors and create checkboxes
+    behaviors.forEach(behavior => {
+
+        // Create a label element
+        //const label = document.createElement("label");
+        //label.classList.add("selectgroup-item"); // Add the "selectgroup-item" class to the label
+        
+        // or use this:-  both are same way to create label element
+        // Create a label element and set its classes
+        // eg: <label class="selectgroup-item">
+        const label = Object.assign(
+            document.createElement("label"),
+            {
+                className: "selectgroup-item"
+            }
+        );
+
+        
+        // Create an input element of type checkbox
+        //const input = document.createElement("input");
+        //input.type = "checkbox"; // Set the input type to checkbox
+        //input.name = "value"; // Set the name attribute of the checkbox
+        //input.value = behavior; // Set the value attribute of the checkbox to the current behavior
+        //input.classList.add("selectgroup-input", "behaviour_checkbox"); // Add classes to the checkbox
+
+        // or use this:-  both are same way to create input element
+        // Create an input element of type checkbox and set its attributes and classes
+        // eg:  <input type="checkbox" name="value" value="Aggressive" class="selectgroup-input behaviour_checkbox" >
+        const input = Object.assign(
+            document.createElement("input"), 
+            { 
+                type: "checkbox", 
+                name: "value", 
+                value: behavior, 
+                className: "selectgroup-input behaviour_checkbox" 
+            }
+        );
+
+        
+        // Create a span element to hold the behavior text
+        //const span = document.createElement("span");
+        //span.classList.add("selectgroup-button"); // Add the "selectgroup-button" class to the span
+        //span.textContent = behavior; // Set the text content of the span to the current behavior
+        
+        // or use this:-  both are same way to create input element
+        // Create a span element to hold the behavior text and set its classes
+        // eg: <span class="selectgroup-button">Aggressive</span>
+        const span = Object.assign(
+            document.createElement("span"),
+            {
+                className: "selectgroup-button",
+                textContent: behavior
+            }
+        )
+        
+         // Append the input and span elements to the label element
+        label.appendChild(input);
+        label.appendChild(span);
+        
+        // Append the label element to the container
+        container.appendChild(label);
+        
+        // Check the checkbox based on whether the current behavior is in the DB_behaviours
+        if (DB_behaviours.includes(behavior)) 
+        {
+            input.checked = true; // If the behavior is in DB_behaviours, set the checked attribute of the checkbox to true
+        }
+        
+    }); // forEach end
+
+
+    // Select Dog Behaviour input box value setter logic, eg: [Aggressive,Biting,Social,Friendly,Barking,Chasing,Territorial,Illness]
+    $('.behaviour_checkbox').click(function(){
+        var behaviour_data = "";
+
+        $('.behaviour_checkbox:checked').each(function(){
+            behaviour_data += $(this).val()+", "
+        })
+
+        behaviour_data=behaviour_data.substring(0, behaviour_data.length-2) //removing last comma
+
+        $('#behaviour_data_text_box').val(behaviour_data); // setting input value
+
+    }); // onclick end
 
 </script>
 
