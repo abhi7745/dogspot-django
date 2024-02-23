@@ -21,3 +21,4 @@ class User(AbstractUser):
     place=models.CharField(max_length=255, null=True, blank=True)
     latitude=models.CharField(max_length=255, null=True, blank=True)
     longitude=models.CharField(max_length=255, null=True, blank=True)
+    profile_pic=models.ImageField(upload_to='users/profile_pic', null=True, blank=True)
