@@ -19,14 +19,13 @@ from django.urls import path, include
 from django.conf import settings # for 'media' folder setting purpose
 from django.conf.urls.static import static # for 'media' folder setting purpose
 
-from accounts.views import index
 
 urlpatterns = [
     path('django-admin/', admin.site.urls),
 
     # accounts app main urls
     # home url
-    path('', index, name='index'),
+    path('', include('home.urls')),
     path('accounts/',include('accounts.urls')),
     path('admin/',include('admin_panel.urls')),
     path('user/',include('user.urls')),

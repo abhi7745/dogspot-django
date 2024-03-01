@@ -34,18 +34,66 @@ margin-top: -50px;">
 <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
+<!-- Leaflet.Locate plugin cdn-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+
 <script>
     // map initialization
     // var map = L.map('map').setView([9.621770, 76.530144], 15);
     // var map = L.map('map').setView([8.5241391, 76.9366376], 15);
     // var map = L.map('map').setView([8.4855, 76.9492], 15); // python
-    var map = L.map('map', {fullscreenControl: true}).setView([{{lat}}, {{lng}}], 12); // python
+    {% comment %} var map = L.map('map', {fullscreenControl: true}).setView([{{lat}}, {{lng}}], 12); // python {% endcomment %}
+    var map = L.map('map', {fullscreenControl: true}).setView([9.772655, 76.519711], 12); // python
 
     
     // osm layer
     var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
+
+
+
+    // creating user location control and add to map - start  ################################
+    var lc = L.control
+        .locate({
+            position: "topleft",
+            strings: {
+                title: "Show me where I am, yo!"
+            },
+            locateOptions: {
+                enableHighAccuracy: true
+            },
+            locateOptions: {
+                maxZoom: 19
+            }
+
+    }).addTo(map);
+
+    // request location update and set location
+    lc.start(); // this will 
+
+    function onLocationFound(e) {
+        var radius = e.accuracy;
+    
+        {% comment %} L.marker(e.latlng).addTo(map)
+            .bindPopup("You are within " + radius + " meters from this point").openPopup(); {% endcomment %}
+    
+        {% comment %} L.circle(e.latlng, radius).addTo(map); {% endcomment %}
+        console.log(e.latlng.lat, 'terrereere')
+        console.log(e.latlng.lng, 'terrereere')
+    }
+    
+    map.on('locationfound', onLocationFound); // calling the function "onLocationFound"
+
+
+    // function onLocationError(e) {
+    //     alert(e.message);
+    // }
+    
+    // map.on('locationerror', onLocationError); // calling the function "onLocationError"
+    // creating user location control and add to map - end ################################
+
     
     // searchLocation = L.Control.geocoder().addTo(map);
     // map.on('click', function(e) {
@@ -65,7 +113,7 @@ margin-top: -50px;">
             lng = e.geocode.center.lng
             location_name = e.geocode.name
             var search_marker = L.marker([lat, lng], {draggable:true}).addTo(map);
-            search_marker.bindPopup(`${location_name} ${search_marker.getLatLng()}<br><a href="add-dogspot/${lat}/${lng}" style="display:flex;justify-content:center;font-weight:bold;">Add Dogspot </a>`).openPopup();
+            search_marker.bindPopup(`${location_name} ${search_marker.getLatLng()}<br><a href="/user/add-dogspot/${lat}/${lng}" target="_blank" style="display:flex;justify-content:center;font-weight:bold;">Add Dogspot </a>`).openPopup();
 
             // ondrag marker pointer updater
             search_marker.on('drag', function(e) {
@@ -75,18 +123,66 @@ margin-top: -50px;">
                 // console.log(e.target._popup._content)
                 console.log(search_marker)
                 // search_marker.bindPopup(`<a href="add-dogspot/${lat}/${lng}" target="_blank">Add Dogspot </a>` + search_marker.getLatLng()).openPopup();
-                search_marker.bindPopup(`${location_name} ${search_marker.getLatLng()}<br><a href="add-dogspot/${lat}/${lng}" style="display:flex;justify-content:center;font-weight:bold;">Add Dogspot </a>`).openPopup();
+                search_marker.bindPopup(`${location_name} ${search_marker.getLatLng()}<br><a href="/user/add-dogspot/${lat}/${lng}" target="_blank" style="display:flex;justify-content:center;font-weight:bold;">Add Dogspot </a>`).openPopup();
             });
 
 
-        }).addTo(map);
+    }).addTo(map);
 
     // adding marker points
     // var mymarker = L.marker([8.5241391, 76.9366376]).addTo(map);
-    var mymarker = L.marker([{{lat}}, {{lng}}]).addTo(map);
-    console.log(mymarker)
-    mymarker.bindPopup('Normal Marker '+ mymarker.getLatLng())
+    {% comment %} var mymarker = L.marker([{{lat}}, {{lng}}]).addTo(map); {% endcomment %}
+    
+    // var mymarker = L.marker([9.772655, 76.519711]).addTo(map);
+    
+    // console.log(mymarker)
+    // mymarker.bindPopup('Normal Marker amal'+ mymarker.getLatLng())
 
+    // var mymarker = L.circle(
+    //     {% comment %} [{{lat}}, {{lng}}], {% endcomment %}
+    //     {% comment %} [9.617436, 76.532735], {% endcomment %}
+    //     [9.772655, 76.519711],
+    //     {
+    //         //icon: greenIcon,
+    //         color: '#CAC428',
+    //         fillColor: '#CAC428',
+    //         fillOpacity: 0.3,
+    //         radius: 500
+    //     }
+    // ).addTo(map);
+
+
+    // dynamic map point adder to leaflet map
+    {% for map in map_db  %}
+    {% comment %} console.log('{{map.place_name}}') {% endcomment %}
+        var mymarker = L.marker([{{map.latitude}}, {{map.longitude}}]).addTo(map);
+        mymarker.bindPopup( ` <a href="https://www.tcsion.com/hub/national-qualifier-test/" style="text-decoration: none;">
+            <div style="display: flex;justify-content: space-around;">
+                <img alt="image" src="{{map.dog_pics_set.all.0.image.url}}" class="" style="width: 70px; height: 70px; border-radius: 50%;" data-toggle="tooltip" title="" data-original-title="Dog image">
+                <div style="padding-left: 16px;color:black;">
+                    <h5>{{map.place_name|truncatechars:16}}</h5>
+                    <span>
+                        {{map.description|truncatechars:32}}
+                    </span>
+                </div>
+        
+            </div>
+        </a>`);
+
+        {% comment %} ${mymarker.getLatLng()} {% endcomment %}
+        
+        var mymarker = L.circle(
+            {% comment %} [{{lat}}, {{lng}}], {% endcomment %}
+            [{{map.latitude}}, {{map.longitude}}],
+            {
+                //icon: greenIcon,
+                color: '{{map.radius_color}}',
+                fillColor: '{{map.radius_color_hexcode}}',
+                fillOpacity: 0.3,
+                radius: '{{map.km_distance}}'
+                }
+            ).addTo(map);
+    {% endfor %}
 
     // adding custom-marker points with on click event
     map.on('click', function(e){
@@ -95,7 +191,7 @@ margin-top: -50px;">
         lng = e.latlng.lng
         console.log(marker.getLatLng().lat, 'aaaaaaaaaaaaa')
         // marker.bindPopup(`<a href="add/${lat}/${lng}">Add Dogspot</a> ` + marker.getLatLng())
-        marker.bindPopup(`${marker.getLatLng()} <a href="/user/add-dogspot/${lat}/${lng}"  style="display:flex;justify-content:center;font-weight:bold;">Add Dogspot </a>`).openPopup();
+        marker.bindPopup(`${marker.getLatLng()} <a href="/user/add-dogspot/${lat}/${lng}" target="_blank" style="display:flex;justify-content:center;font-weight:bold;">Add Dogspot </a>`).openPopup();
         // alert(e.latlng)
         // console.log(e.latlng)
 
@@ -103,9 +199,16 @@ margin-top: -50px;">
             // console.log('marker drag event : ', marker.getLatLng());
             lat = marker.getLatLng().lat
             lng = marker.getLatLng().lng
-            marker.bindPopup(`${marker.getLatLng()} <a href="/user/add-dogspot/${lat}/${lng}" style="display:flex;justify-content:center;font-weight:bold;">Add Dogspot </a>`).openPopup()
+            marker.bindPopup(`${marker.getLatLng()} <a href="/user/add-dogspot/${lat}/${lng}" target="_blank" style="display:flex;justify-content:center;font-weight:bold;">Add Dogspot </a>`).openPopup()
         });
     });
+
+
+    
+    
+
+    
+    
 
 </script>
 

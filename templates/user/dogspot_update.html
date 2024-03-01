@@ -37,9 +37,13 @@ User Dashboard
                     <div class="card-body">
 
 
+
+                        <!-- hidden id passing for post updation form purpose -->
+                        <input type="hidden" id="id" name="id" value="{{ single_map_object.id }}" class="form-control" required>
+
                         <div class="form-group">
-                            <label>Title</label>
-                            <input type="text" id="title" name="title" value="{{ single_map_object.title }}" class="form-control" id="" required>
+                            <label>Place Name</label>
+                            <input type="text" id="place_name" name="place_name" value="{{ single_map_object.place_name }}" class="form-control" required>
                         </div>
 
                         <div class="form-group">
@@ -76,7 +80,7 @@ User Dashboard
                             <label class="form-label">Select Dog Behaviour</label>
 
                             <!-- multiple checkbox Behaviour value hold in input box -->
-                            <input type="text" id="behaviour_data_text_box" value="{{ single_map_object.behaviour }}"  name='behaviour' class="form-control">
+                            <input type="hidden" id="behaviour_data_text_box" value="{{ single_map_object.behaviour }}"  name='behaviour' class="form-control">
 
 
                             {% comment %} // this is an updation page - so, this script is dynamically create using javasript, the js logic is in the last area of this page {% endcomment %}
@@ -123,7 +127,18 @@ User Dashboard
                         </div>
                         
 
-                            
+                        <div class="form-group">
+                            <label>Select Distance</label>
+                            <select name="km" id="km" class="form-control" required>
+                                <option value="" selected disabled>Select</option>
+                                <option value="250"  {% if single_map_object.km_distance == 250 %}selected{% endif %} >500 meters</option>
+                                <option value="500" {% if single_map_object.km_distance == 500 %}selected{% endif %} >1 kilometers</option>
+                                <option value="1000" {% if single_map_object.km_distance == 1000 %}selected{% endif %} >2 kilometers</option>
+                                <option value="1500" {% if single_map_object.km_distance == 1500 %}selected{% endif %} >3 kilometers</option>
+                                <option value="2000" {% if single_map_object.km_distance == 2000 %}selected{% endif %} >4 kilometers</option>
+                                <option value="2500" {% if single_map_object.km_distance == 2500 %}selected{% endif %} >5 kilometers</option>
+                            </select>
+                        </div>
                         
 
                         <!-- We'll transform this input into a pond -->
@@ -141,14 +156,50 @@ User Dashboard
                         
                     </div>
                     <div class="card-footer text-right">
-                        <button class="btn btn-danger" id="delete_Btn">Delete</button>
+                        <a href="#" class="btn btn-danger" id="delete_Btn" data-toggle="modal" data-target="#delete_model_form">Delete</a>
                         <button class="btn btn-primary" id="add_Btn">Update</button>
+                        <a href="{% url "user.dogspot_list" %}" class="btn btn-secondary">Back</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    
 </section>
+
+
+ 
+<!-- Deleting model form start -->
+<div class="modal fade" id="delete_model_form" tabindex="-1" role="dialog"
+aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Alert!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to delete the place "{{single_map_object.place_name}}"? This action cannot be undone, and all associated data will be permanently removed.
+    </div>
+    <div class="modal-footer bg-whitesmoke br">
+        
+        <form action="{% url "user.dogspot_delete" %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="delete_id" value="{{single_map_object.id}}">
+            <button type="submit" id="model_form_delete_btn" class="btn btn-primary">Confirm</button>
+        </form>
+
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    </div>
+    </div>
+</div>
+</div>
+<!-- Deleting model form end -->
+
+
+ 
 
 <!-- Filepond resize image style -->
 <style>
@@ -176,6 +227,11 @@ User Dashboard
 
 {% comment %} sweet alert2 cdn {% endcomment %}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.14/dist/sweetalert2.all.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
 <!-- FilePond image preview library -->
 <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
@@ -220,6 +276,7 @@ User Dashboard
     );
 
     var  files = [];
+    var image_elemenet_changed = 0
     const inputElement = document.querySelector('input[type="file"]');
     
     // filepond object creating inside a function and calling them
@@ -233,7 +290,9 @@ User Dashboard
             // imageResizeMode: 'contain'
             onaddfile: (err, fileItem) =>{
                 files.push(fileItem.file);
+                image_elemenet_changed += 1
                 console.log(files);
+                console.log('image_elemenet_changed:', image_elemenet_changed);
             },
 
             onremovefile: (err, fileItem) =>{
@@ -242,12 +301,38 @@ User Dashboard
                     files.splice(index, 1);
                 }
                 console.log(files);
+
+                image_elemenet_changed -= 1
+                console.log('image_elemenet_changed:', image_elemenet_changed);
             }
             
         }); 
 
         // adding restyle filepond input box style 
         $(".filepond--drop-label").addClass("form-control");
+
+
+
+        // Fetch the image URL from Django and add it to FilePond
+        {% if single_map_object.dog_pics_set %}
+            {% for data in single_map_object.dog_pics_set.all  %}
+                fetch('http://127.0.0.1:8000{{data.image.url }}')
+                .then(response => response.blob())
+                .then(blob => {
+                    console.log('Fetched blob:', blob);
+                    const file = new File([blob], '{{ data.image.name }}', { type: 'image/jpeg' }); // Adjust the type based on the actual file type
+                    console.log('Created file:', file);
+                    pond.addFile(file);
+                })
+                .catch(error => {
+                    console.error(error, '?????????????????????????????????????????????????????????????????????');
+                });
+            {% endfor %}
+        {% endif %}
+        
+    
+        console.log('final image_elemenet_changed:', image_elemenet_changed)
+
     }
     filepondcreator(); // filepond object creation function call
 
@@ -261,10 +346,12 @@ User Dashboard
         e.preventDefault();
 
         // normal input elements data 
-        formData.append('title', $('#title').val());
+        formData.append('id', $('#id').val());
+        formData.append('place_name', $('#place_name').val());
         formData.append('description', $('#description').val());
         formData.append('no_of_dogs', $('#no_of_dogs').val());
         formData.append('behaviour', $('#behaviour_data_text_box').val());
+        formData.append('km', $('#km').val());
         
         // file input element data
         formData.append('length', files.length); // passing image length using filepond method "onaddfile" and "onremovefile"
@@ -279,7 +366,7 @@ User Dashboard
 
         $.ajax({
             type:'POST',
-            url: '',
+            url: '{% url "user.dogspot_update" %}',
             data:formData,
             cache:false,
             processData:false,
@@ -309,15 +396,15 @@ User Dashboard
                 // alert('the form send successfully');
                 // console.log(formData);
 
-                $('#form')[0].reset(); // resetting all form elements, but filepond object will not affect form reset method
+                //$('#form')[0].reset(); // resetting all form elements, but filepond object will not affect form reset method
 
-                files=[]; // set to empty for form submission - because files adding methos start form scratch ("onaddfile" and "onremovefile")
-                FilePond.destroy(inputElement); // it will remove the entire filepond object from Dom element
-                filepondcreator(); // filepond object creation function re-call - it will create new filepond object after form submission
+                //files=[]; // set to empty for form submission - because files adding methos start form scratch ("onaddfile" and "onremovefile")
+                //FilePond.destroy(inputElement); // it will remove the entire filepond object from Dom element
+                //filepondcreator(); // filepond object creation function re-call - it will create new filepond object after form submission
                 
                 $("#add_Btn").removeClass("btn-progress disabled"); // removing button progress and disabled
 
-                // sweet alert2 
+                {% comment %} // sweet alert2 
                 Swal.fire({
                     icon: 'success',
                     title: 'Thank you for your contribution',
@@ -330,7 +417,15 @@ User Dashboard
                     function(){
                         window.location.href = '{% url 'user.static_dogspot_marker_map' %}' // redirecting to map-marker view
                         //alert('hai');
-                }, 5000);
+                }, 5000); {% endcomment %}
+
+
+                iziToast.success({
+                    position: "topRight",
+                    timeout: 5000, icon: 'ico-success', 
+                    title: 'Spot',
+                    message: 'updated successfully'
+                });
 
             }
                 
@@ -449,6 +544,13 @@ User Dashboard
         $('#behaviour_data_text_box').val(behaviour_data); // setting input value
 
     }); // onclick end
+
+
+
+    //delete_Btn click disabling and set ot progress btn animation
+    $('#model_form_delete_btn').click(function(){
+        $("#model_form_delete_btn").addClass("btn-progress disabled"); // delete button -> progress and disabled
+    });
 
 </script>
 

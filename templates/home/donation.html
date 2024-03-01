@@ -1,0 +1,468 @@
+{% extends "home/base.html" %}
+{% load static %}
+
+{% block styles %}
+<!-- Custom css for donation form -->
+<style>
+
+    /*---------------------------------------
+      CUSTOM PROPERTIES ( VARIABLES )             
+    -----------------------------------------*/
+    :root {
+      --white-color:                  #ffffff;
+      --primary-color:                #5bc1ac;
+      --secondary-color:              #5a6f80;
+      --section-bg-color:             #f0f8ff;
+      --site-footer-bg-color:         #44525d;
+      --custom-btn-bg-color:          #597081;
+      --custom-btn-bg-hover-color:    #5bc1ac;
+      --dark-color:                   #000000;
+      --p-color:                      #717275;
+      --border-color:                 #e9eaeb;
+    
+      --body-font-family:             'Metropolis', sans-serif;
+    
+      --h1-font-size:                 52px;
+      --h2-font-size:                 46px;
+      --h3-font-size:                 32px;
+      --h4-font-size:                 28px;
+      --h5-font-size:                 24px;
+      --h6-font-size:                 22px;
+      --p-font-size:                  16px;
+      --btn-font-size:                18px;
+      --copyright-font-size:          14px;
+    
+      --border-radius-large:          100px;
+      --border-radius-medium:         20px;
+      --border-radius-small:          10px;
+    
+      --font-weight-light:            300;
+      --font-weight-normal:           400;
+      --font-weight-semibold:         600;
+      --font-weight-bold:             700;
+    }
+    
+   
+    
+    
+    /*---------------------------------------
+      CUSTOM FORM               
+    -----------------------------------------*/
+    .custom-form .form-control,
+    .input-group-file {
+      background-color: var(--section-bg-color);
+      box-shadow: none;
+      border: 0;
+      color: var(--p-color);
+      margin-bottom: 24px;
+      padding-top: 13px;
+      padding-bottom: 13px;
+      outline: none;
+    }
+    
+    .custom-form .form-control:hover,
+    .custom-form .form-control:focus {
+      border-color: var(--secondary-color);
+    }
+    
+    .custom-form label {
+      margin-bottom: 10px;
+    }
+    
+    .custom-form .form-check-group {
+      margin-bottom: 20px;
+    }
+    
+    .donate-form .form-check-group-donation-frequency {
+      padding-right: 0;
+    }
+    
+    .form-check-group-donation-frequency + .form-check-group-donation-frequency {
+      padding-right: 12px;
+      padding-left: 0;
+    }
+    
+    .form-check-group-donation-frequency .form-check-label {
+      font-weight: var(--font-weight-semibold);
+    }
+    
+    #DonationFrequencyOne {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    
+    #DonationFrequencyMonthly {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    
+    .custom-form .form-check-radio {
+      position: relative;
+      height: 100%;
+      padding-left: 0;
+    }
+    
+    .custom-form .input-group-text {
+      background: var(--secondary-color);
+      border: 0;
+      color: var(--white-color);
+    }
+    
+    .custom-form .form-check-radio .form-check-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    
+    .form-check-radio .form-check-input[type=radio] {
+      background-color: var(--section-bg-color);
+      border-radius: .25rem;
+      border: 0;
+      box-shadow: none;
+      outline: none;
+      width: 100%;
+      margin-top: 0;
+      margin-left: 0;
+      padding: 25px 50px;
+      transition: all 0.5s;
+    }
+    
+    .form-check-radio .form-check-input:checked[type=radio] {
+      background-image: none;
+    }
+    
+    .form-check-radio .form-check-input:checked[type=radio] + .form-check-label,
+    .form-check-radio .form-check-input:hover + .form-check-label,
+    .form-check-radio .form-check-input:checked + .form-check-label {
+      color: var(--white-color);
+    }
+    
+    .form-check-radio .form-check-input:hover,
+    .form-check-radio .form-check-input:checked {
+      background-color: var(--secondary-color);
+      border-color: var(--white-color);
+    }
+    
+    .input-group-file {
+      border-radius: .25rem;
+      padding: 13px .75rem;
+    }
+    
+    .input-group-file input[type=file] {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+      padding: 0;
+    }
+    
+    .input-group-file .input-group-text {
+      background: transparent;
+      color: inherit;
+      margin-bottom: 0;
+      padding: 0;
+    }
+    
+    .custom-form button[type="submit"] {
+      background: var(--custom-btn-bg-color);
+      border: none;
+      border-radius: var(--border-radius-large);
+      color: var(--white-color);
+      font-size: var(--p-font-size);
+      font-weight: var(--font-weight-semibold);
+      transition: all 0.3s;
+      margin-bottom: 0;
+    }
+    
+    .custom-form button[type="submit"]:hover,
+    .custom-form button[type="submit"]:focus {
+      background: var(--custom-btn-bg-hover-color);
+      border-color: transparent;
+    }
+    
+    
+    /*---------------------------------------
+      CONTACT SEARCH & DONATE & SUBCRIBE FORM              
+    -----------------------------------------*/
+    .contact-form .form-control {
+      background: var(--white-color);
+    }
+    
+    .search-form {
+      position: relative;
+    }
+    
+    .search-form .form-control {
+      padding-right: 50px;
+    }
+    
+    .search-form button[type="submit"] {
+      background: transparent;
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: var(--p-color);
+      width: 50px;
+      padding: 12px;
+    }
+    
+    .search-form button[type="submit"]:hover {
+      background: transparent;
+      color: var(--dark-color);
+    }
+    
+    .subscribe-form {
+      background: var(--section-bg-color);
+      border-radius: var(--border-radius-small);
+      padding: 30px;
+    }
+    
+    .subscribe-form .form-control {
+      background: var(--white-color);
+    }
+    
+    .donate-form .form-control {
+      margin-bottom: 0;
+    }
+
+</style>
+
+<!-- Bootstrap icons cdn -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+{% endblock styles %}
+
+{% block content %}
+
+    <!-- Navbar & Start -->
+    <div class="container-fluid position-relative p-0">
+        
+        {% include "home/navigation_bar.html" %}
+
+        <!-- Start -->
+        <div class="container-fluid py-5 wow fadeInUp"  
+            id="div_background"
+            style="background: url('https://images.unsplash.com/photo-1444212477490-ca407925329e?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c3RyZWV0JTIwZG9nfGVufDB8fDB8fHww');
+            background-size: cover;"
+            data-wow-delay="0.1s">
+
+
+            <div class="overlay"
+            style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity as needed */
+            z-index: 1; /* Ensure the overlay sits on top of the background image */
+            "
+            id="my_overlay">
+            </div> 
+            
+            {% comment %} <div class="container py-5">
+                <div class="row g-5">
+                    <div class="col-lg-12" style="height: 600px;"> <!-- Set a fixed height for the map container -->
+                        <div width: 100%; height: 100%; id="map" style="width: 100%; height: 100%;z-index: 1;"></div> <!-- Set the map container to fill its parent -->
+                    </div>
+                </div>
+            </div> {% endcomment %}
+
+            
+        </div>
+    </div>
+    <!-- End -->
+
+
+
+    <!-- donation section Start -->
+    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
+                <h5 class="fw-bold text-primary text-uppercase">Donations</h5>
+                <h1 class="mb-0">A small donation can make a big difference in a dog's life.</h1>
+            </div>
+            <div class="row g-5">
+                
+                
+                <div class="container">
+                    <div class="row">
+    
+                        <div class="col-lg-6 col-12 mx-auto">
+                            <form class="custom-form donate-form" action="#" method="get" role="form">
+                                <h3 class="mb-4">Make a donation</h3>
+    
+                                <div class="row">
+                                    {% comment %} <div class="col-lg-12 col-12">
+                                        <h5 class="mb-3">Donation Frequency</h5>
+                                    </div>
+    
+                                    <div class="col-lg-6 col-6 form-check-group form-check-group-donation-frequency">
+                                        <div class="form-check form-check-radio">
+                                            <input class="form-check-input" type="radio" name="DonationFrequency" id="DonationFrequencyOne" checked="">
+    
+                                            <label class="form-check-label" for="DonationFrequencyOne">
+                                                One Time
+                                            </label>
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-lg-6 col-6 form-check-group form-check-group-donation-frequency">
+                                        <div class="form-check form-check-radio">
+                                            <input class="form-check-input" type="radio" name="DonationFrequency" id="DonationFrequencyMonthly">
+    
+                                            <label class="form-check-label" for="DonationFrequencyMonthly">
+                                                Monthly
+                                            </label>
+                                        </div>
+                                    </div> {% endcomment %}
+    
+                                    <div class="col-lg-12 col-12">
+                                        <h5 class="mt-2 mb-3">Select an amount</h5>
+                                    </div>
+    
+                                    <div class="col-lg-3 col-md-6 col-6 form-check-group">
+                                        <div class="form-check form-check-radio">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                            <label class="form-check-label" for="flexRadioDefault1">
+                                                ₹100
+                                            </label>
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-lg-3 col-md-6 col-6 form-check-group">
+                                        <div class="form-check form-check-radio">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+                                            <label class="form-check-label" for="flexRadioDefault2">
+                                                ₹500
+                                            </label>
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-lg-3 col-md-6 col-6 form-check-group">
+                                        <div class="form-check form-check-radio">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3">
+                                            <label class="form-check-label" for="flexRadioDefault3">
+                                                ₹1000
+                                            </label>
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-lg-3 col-md-6 col-6 form-check-group">
+                                        <div class="form-check form-check-radio">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault4">
+                                            <label class="form-check-label" for="flexRadioDefault4">
+                                                ₹2000
+                                            </label>
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-lg-3 col-md-6 col-6 form-check-group">
+                                        <div class="form-check form-check-radio">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault5">
+                                            <label class="form-check-label" for="flexRadioDefault5">
+                                                ₹5000
+                                            </label>
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-lg-3 col-md-6 col-6 form-check-group">
+                                        <div class="form-check form-check-radio">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault6">
+                                            <label class="form-check-label" for="flexRadioDefault6">
+                                                ₹10000
+                                            </label>
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-lg-6 col-12 form-check-group">
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon1">₹</span>
+    
+                                            <input type="text" class="form-control" placeholder="Custom amount" aria-label="Username" aria-describedby="basic-addon1">
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-lg-12 col-12">
+                                        <h5 class="mt-1">Personal Info</h5>
+                                    </div>
+    
+                                    <div class="col-lg-6 col-12 mt-2">
+                                        <input type="text" name="donation-name" id="donation-name" class="form-control" placeholder="Name" required="">
+                                    </div>
+    
+                                    <div class="col-lg-6 col-12 mt-2">
+                                        <input type="email" name="donation-email" id="donation-email" pattern="[^ @]*@[^ @]*" class="form-control" placeholder="Email" required="">
+                                    </div>
+    
+                                    <div class="col-lg-12 col-12">
+                                        <h5 class="mt-4 pt-1">Choose Payment</h5>
+                                    </div>
+    
+                                    <div class="col-lg-12 col-12 mt-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="DonationPayment" id="flexRadioDefault10">
+                                            <label class="form-check-label" for="flexRadioDefault10">
+                                                <i class="bi-credit-card custom-icon ms-1"></i>
+                                                Debit or Credit card
+                                            </label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="DonationPayment" id="flexRadioDefault11">
+                                            <label class="form-check-label" for="flexRadioDefault11">
+                                                &nbsp;<svg height="15px" width="15px" enable-background="new 0 0 128 128" id="Social_Icons" version="1.1" viewBox="0 0 128 128" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="_x31__stroke"><g id="Google"><rect clip-rule="evenodd" fill="none" fill-rule="evenodd" height="128" width="128"/><path clip-rule="evenodd" d="M27.585,64c0-4.157,0.69-8.143,1.923-11.881L7.938,35.648    C3.734,44.183,1.366,53.801,1.366,64c0,10.191,2.366,19.802,6.563,28.332l21.558-16.503C28.266,72.108,27.585,68.137,27.585,64" fill="#FBBC05" fill-rule="evenodd"/><path clip-rule="evenodd" d="M65.457,26.182c9.031,0,17.188,3.2,23.597,8.436L107.698,16    C96.337,6.109,81.771,0,65.457,0C40.129,0,18.361,14.484,7.938,35.648l21.569,16.471C34.477,37.033,48.644,26.182,65.457,26.182" fill="#EA4335" fill-rule="evenodd"/><path clip-rule="evenodd" d="M65.457,101.818c-16.812,0-30.979-10.851-35.949-25.937    L7.938,92.349C18.361,113.516,40.129,128,65.457,128c15.632,0,30.557-5.551,41.758-15.951L86.741,96.221    C80.964,99.86,73.689,101.818,65.457,101.818" fill="#34A853" fill-rule="evenodd"/><path clip-rule="evenodd" d="M126.634,64c0-3.782-0.583-7.855-1.457-11.636H65.457v24.727    h34.376c-1.719,8.431-6.397,14.912-13.092,19.13l20.474,15.828C118.981,101.129,126.634,84.861,126.634,64" fill="#4285F4" fill-rule="evenodd"/></g></g></svg>
+                                                Google Pay
+                                            </label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="DonationPayment" id="flexRadioDefault12">
+                                            <label class="form-check-label" for="flexRadioDefault12">
+                                                {% comment %} <i class="bi-paypal custom-icon ms-1"></i> {% endcomment %}
+                                                &nbsp;<svg height="21px" width="21px" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 48 48">
+                                                    <path fill="#4527a0" d="M42,37c0,2.762-2.238,5-5,5H11c-2.761,0-5-2.238-5-5V11c0-2.762,2.239-5,5-5h26c2.762,0,5,2.238,5,5	V37z"></path><path fill="#fff" d="M32.267,20.171c0-0.681-0.584-1.264-1.264-1.264h-2.334l-5.35-6.25	c-0.486-0.584-1.264-0.778-2.043-0.584l-1.848,0.584c-0.292,0.097-0.389,0.486-0.195,0.681l5.836,5.666h-8.851	c-0.292,0-0.486,0.195-0.486,0.486v0.973c0,0.681,0.584,1.506,1.264,1.506h1.972v4.305c0,3.502,1.611,5.544,4.723,5.544	c0.973,0,1.378-0.097,2.35-0.486v3.112c0,0.875,0.681,1.556,1.556,1.556h0.786c0.292,0,0.584-0.292,0.584-0.584V21.969h2.812	c0.292,0,0.486-0.195,0.486-0.486V20.171z M26.043,28.413c-0.584,0.292-1.362,0.389-1.945,0.389c-1.556,0-2.097-0.778-2.097-2.529	v-4.305h4.043V28.413z"></path>
+                                                    </svg>
+                                                Phonepay
+                                            </label>
+                                        </div>
+    
+                                        <button type="submit" class="form-control mt-4">Submit Donation</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+    
+                    </div>
+                </div>
+                
+
+            </div>
+        </div>
+    </div>
+    <!-- donation section End -->
+
+
+
+    <!-- donation form style in moble -->
+        <style>
+            @media only screen and (max-width: 991px) {
+                #div_background {
+                    padding: 0px !important;
+                    margin: 0px !important;
+                }
+            }
+        </style>
+    <!-- donation form style in moble -->
+
+    
+
+{% endblock content %}
+
+{% block script %}
+
+{% endblock script %}

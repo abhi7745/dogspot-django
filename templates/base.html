@@ -59,6 +59,15 @@
                                 </div>
                             </form>
                         </li> -->
+
+                        <li class="">
+                            {% comment %} <a href="{% url 'user.map_view' %}" class="nav-link"><i data-feather="map"></i><span>Map</span></a> {% endcomment %}
+                            <a href="{% url 'home.index' %}" class="nav-link nav-link-lg" style="color:black;margin-top:2px;"> 
+                                {% comment %} <i class="fas fa-home"></i> {% endcomment %}
+                                Home
+                            </a>
+                        </li>
+
                     </ul>
                 </div>
                 <ul class="navbar-nav navbar-right">
@@ -70,6 +79,16 @@
                             <!-- <div class="dropdown-title">Hello {{ request.user }}</div> -->
                             
                         
+                            <a href="{% url 'home.index' %}" class="dropdown-item has-icon text-danger"> <i
+                                class="fas fa-home"></i>
+                                Home
+                            </a>
+
+                            <a href="{% url 'home.index' %}" class="dropdown-item has-icon text-danger"> <i
+                                class="fas fa-user"></i>
+                                Profile
+                            </a>
+
                             <a href="{% url 'logout' %}" class="dropdown-item has-icon text-danger"> <i
                                 class="fas fa-sign-out-alt"></i>
                                 Logout

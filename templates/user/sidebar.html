@@ -6,24 +6,31 @@
         </a>
     </div>
     <ul class="sidebar-menu">
-        <li class="menu-header">Main</li>
+        <li class="menu-header">
+            <div style="display: flex;justify-content: space-between;">
+                <span>Menu</span>
+                <span style="height:10px;">
+                    <a href="{% url "home.index" %}" style="height:33px;">Home</a>
+                </span>
+            </div>
+        </li>
 
         {% comment %} {% if request.resolver_match.url_name == 'admin.dashboard' %} active {% endif %} {% endcomment %}
 
-        <li class="dropdown active">
+        <li class="dropdown {% if request.resolver_match.url_name == 'user.dashboard' %} active {% endif %}">
             <a href="{% url 'user.dashboard' %}" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
         </li>
 
-        <li class="dropdown">
+        <li class="dropdown {% if request.resolver_match.url_name == 'user.map_view' %} active {% endif %}">
             <a href="{% url 'user.map_view' %}" class="nav-link"><i data-feather="map"></i><span>Map</span></a>
         </li>
 
-        <li class="dropdown">
+        <li class="dropdown {% if request.resolver_match.url_name == 'user.static_dogspot_marker_map' or request.resolver_match.url_name == 'user.dogspot_list' or request.resolver_match.url_name == 'user.dogspot_update' or request.resolver_match.url_name == 'user.add_dogspot'  %} active {% endif %}">
             <a href="#" class="menu-toggle nav-link has-dropdown">
                 <i data-feather="map-pin"></i><span>Add Dogspot</span></a>
             <ul class="dropdown-menu">
-                <li><a class="nav-link" href="{% url 'user.static_dogspot_marker_map' %}">Add</a></li>
-                <li><a class="nav-link" href="#">View</a></li>
+                <li class="{% if request.resolver_match.url_name == 'user.static_dogspot_marker_map' or request.resolver_match.url_name == 'user.add_dogspot' %} active {% endif %}"><a class="nav-link" href="{% url 'user.static_dogspot_marker_map'  %}">Add</a></li>
+                <li class="{% if request.resolver_match.url_name == 'user.dogspot_list' or request.resolver_match.url_name == 'user.dogspot_update' %} active {% endif %}"><a class="nav-link" href="{% url "user.dogspot_list" %}">Your spot</a></li>
             </ul>
         </li>
 

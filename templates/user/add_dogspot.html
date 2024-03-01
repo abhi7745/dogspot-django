@@ -38,8 +38,8 @@ User Dashboard
 
 
                         <div class="form-group">
-                            <label>Title</label>
-                            <input type="text" id="title" name="title" class="form-control" id="" required>
+                            <label>Place Name</label>
+                            <input type="text" id="place_name" name="place_name" class="form-control" id="" required>
                         </div>
 
                         <div class="form-group">
@@ -76,7 +76,7 @@ User Dashboard
                             <label class="form-label">Select Dog Behaviour</label>
 
                             <!-- multiple checkbox Behaviour value hold in input box -->
-                            <input type="text" id="behaviour_data_text_box" name='behaviour' class="form-control">
+                            <input type="hidden" id="behaviour_data_text_box" name='behaviour' class="form-control">
 
                             <div class="selectgroup selectgroup-pills">
                               <label class="selectgroup-item">
@@ -114,6 +114,22 @@ User Dashboard
                             </div>
                           </div>
                         
+
+
+
+                       <div class="form-group">
+                            <label>Select Distance</label>
+                            <select name="km" id="km" class="form-control" required>
+                                <option value="" selected disabled>Select</option>
+                                <option value="250">500 meters</option>
+                                <option value="500">1 kilometers</option>
+                                <option value="1000">2 kilometers</option>
+                                <option value="1500">3 kilometers</option>
+                                <option value="2000">4 kilometers</option>
+                                <option value="2500">5 kilometers</option>
+                            </select>
+                        </div>
+
                         
 
                         <!-- We'll transform this input into a pond -->
@@ -249,10 +265,11 @@ User Dashboard
         e.preventDefault();
 
         // normal input elements data 
-        formData.append('title', $('#title').val());
+        formData.append('place_name', $('#place_name').val());
         formData.append('description', $('#description').val());
         formData.append('no_of_dogs', $('#no_of_dogs').val());
         formData.append('behaviour', $('#behaviour_data_text_box').val());
+        formData.append('km', $('#km').val());
         
         // file input element data
         formData.append('length', files.length); // passing image length using filepond method "onaddfile" and "onremovefile"

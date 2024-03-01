@@ -9,4 +9,5 @@ urlpatterns = [
     path('add-dogspot/<str:lat>/<str:lng>/', add_dogspot, name='user.add_dogspot'),
     path('dogspot_list/', dogspot_list, name='user.dogspot_list'),
     path('dogspot_update/', dogspot_update, name='user.dogspot_update'),
+    path('dogspot_delete/', dogspot_delete, name='user.dogspot_delete'),
 ]
