@@ -7,6 +7,8 @@ from django.contrib.auth import authenticate, login, logout
 from accounts.models import User
 from user.models import Dog_Pics
 
+from django.http import JsonResponse
+
 
 import random # it is for otp generating purpose
 
@@ -139,25 +141,54 @@ def registration_password_setter(request):
         return redirect('/')
     else:
         if request.method == 'POST':
-            psd = request.POST.get('psd')
-            confirm_psd = request.POST.get('confirm_psd')
-            print(email)
-            print(psd)
-            print(confirm_psd)
+
+            try:
+                first_name = request.POST.get('first_name')
+                last_name = request.POST.get('last_name')
+                latitude = request.POST.get('latitude')
+                longitude = request.POST.get('longitude')
+                state = request.POST.get('state')
+                district = request.POST.get('district')
+                place = request.POST.get('place')
+                psd = request.POST.get('psd')
+                # confirm_psd = request.POST.get('confirm_psd')
+
+                print('1:', first_name)
+                print('2:', last_name)
+                print('3:', latitude)
+                print('4:', longitude)
+                print('5:', state)
+                print('6:', district)
+                print('7:', place)
+                print('8:', email)
+                print('9:', psd)
+                # print('10:', confirm_psd)
 
 
-            if(len(psd)<6):
-                print('Password length too short.')
-                context = {'msg':'Password must have at least 6 characters'}
-                return render(request,'accounts/registration_password_setter.html', context)
+                # if(len(psd)<6):
+                #     print('Password length too short.')
+                #     context = {'msg':'Password must have at least 6 characters'}
+                #     return render(request,'accounts/registration_password_setter.html', context)
 
-            elif not psd == confirm_psd:
-                print('password not match')
-                context = {'msg':'Password does not match'}
-                return render(request,'accounts/registration_password_setter.html', context)
+                # elif not psd == confirm_psd:
+                #     print('password not match')
+                #     context = {'msg':'Password does not match'}
+                #     return render(request,'accounts/registration_password_setter.html', context)
 
-            else:
-                user_db=User.objects.create(username=email)
+                # else:
+
+
+                # saving User database area
+                user_db=User.objects.create(
+                        first_name=first_name,
+                        last_name=last_name,
+                        latitude=latitude,
+                        longitude=longitude,
+                        state=state,
+                        district=district,
+                        place=place,
+                        username=email
+                    )
                 user_db.set_password(psd)
                 user_db.save()
 
@@ -168,11 +199,17 @@ def registration_password_setter(request):
                 # request.session['verification'] = False
                 request.session.flush() # deleting all registration session from database
                 print('User verified and created')
-                context = {'success_msg': 'Successfully registered, Please login','static_mail':email}
-                return render(request,'accounts/login.html',context)
+                # context = {'success_msg': 'Successfully registered, Please login','static_mail':email}
+                # return render(request,'accounts/login.html',context)
+                return JsonResponse({'error_msg': False, 'email': email},safe=False)
+            
+            except:
+                request.session.flush() # deleting all registration session from database
+                return JsonResponse({'error_msg': True},safe=False)
 
-    context={}
-    return render(request,'accounts/registration_password_setter.html', context)
+        context={}
+        # return render(request,'accounts/registration_password_setter.html', context)
+        return render(request,'accounts/registration_password_setter.html', context)
 
 def login_page(request):
     # user already logged in section (case 1)

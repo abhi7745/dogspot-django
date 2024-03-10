@@ -72,9 +72,20 @@
                 </div>
                 <ul class="navbar-nav navbar-right">
                     <!--  -->
-                    <li class="dropdown"><a href="#" data-toggle="dropdown"
-                            class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <i data-feather="user"></i><span
-                                class="d-sm-none d-lg-inline-block"></span></a>
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user"> 
+                            {% comment %} <i data-feather="user"></i> {% endcomment %}
+                            <!-- Render user profile picture with rounded style and fit within 30x30 pixels -->
+                            
+                            <img src="{% static request.user.profile_pic.name %}" 
+                            alt="logo"
+                            style="border-radius: 50%; /* Make the image round */
+                                object-fit: cover; /* Fit the image within the specified dimensions */"
+                            height="30px"
+                            width="30px">
+
+                            <span class="d-sm-none d-lg-inline-block"></span>
+                        </a>
                         <div class="dropdown-menu dropdown-menu-right pullDown">
                             <!-- <div class="dropdown-title">Hello {{ request.user }}</div> -->
                             

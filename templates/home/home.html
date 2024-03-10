@@ -432,7 +432,15 @@ crossorigin=""/>
     
     {% comment %} var map = L.map('map', {fullscreenControl: true}).setView([{{lat}}, {{lng}}], 12); // python {% endcomment %}
     {% comment %} var map = L.map('map', {fullscreenControl: true}).setView([9.617436, 76.532735], 12); // python {% endcomment %}
-    var map = L.map('map', {fullscreenControl: true}).setView([9.772655, 76.519711], 12); // python
+    
+    {% comment %} var map = L.map('map', {fullscreenControl: true}).setView([9.772655, 76.519711], 12); // python {% endcomment %}
+
+    {% if request.user.is_authenticated %}
+        var map = L.map('map', {fullscreenControl: true}).setView([{{request.user.latitude}}, {{request.user.longitude}}], 12); // python
+    {% else %}
+        {% comment %} var map = L.map('map', {fullscreenControl: true}).setView([9.772655, 76.519711], 12); // python {% endcomment %}
+        var map = L.map('map', {fullscreenControl: true}).setView([{{lat}}, {{lng}}], 12); // python
+    {% endif %}
 
     
     // osm layer
@@ -506,7 +514,9 @@ crossorigin=""/>
      }).addTo(map);
  
      // request location update and set location
-     lc.start(); // this will automatically set location
+    {% if not request.user.is_authenticated %}
+        lc.start(); // this will automatically set location
+    {% endif %}
     // creating user location control and add to map - start  ################################
 
 

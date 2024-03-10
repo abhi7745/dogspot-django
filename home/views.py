@@ -24,8 +24,10 @@ def index(request):
 
 # map for listing all dog spots
 def map(request):
+    latlng = geocoder.ip('me')
+
     map_db = Map_Details.objects.all()
-    context = {'map_db': map_db}
+    context = {'map_db': map_db, 'lat':latlng.lat, 'lng':latlng.lng}
     return render(request, 'home/map.html', context)
 
 
